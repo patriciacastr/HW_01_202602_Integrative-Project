@@ -1,0 +1,29 @@
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Cache de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Credenciales y tokens (IMPORTANTE: nunca subir esto)
+.env
+*token*
+*credentials*
+config_secret.py
+
+# Selenium / ChromeDriver
+chromedriver.exe
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Outputs pesados si no quieres versionarlos (opcional, puedes comentar estas líneas)
+# lichess/output/*.png
