@@ -5,9 +5,11 @@
 Descarga las partidas de un usuario, genera estadísticas y visualizaciones.
 
 ### Configuración
-Edita al inicio del archivo:
-- `USERNAME`: usuario de Lichess a analizar
-- `MAX_GAMES`: número de partidas a traer
+Al ejecutar el script, te pedirá interactivamente:
+- Usuario de Lichess a analizar (Enter para usar el valor por defecto)
+- Número de partidas a traer (Enter para usar 50)
+
+Requiere un token personal de Lichess con permiso `game:read`, configurado como variable de entorno `LICHESS_TOKEN`.
 
 ### Ejecución
 ```bash
@@ -22,6 +24,23 @@ python lichess_analysis.py
 
 ## Parte B — Automatización de torneos (`lichess_tournaments.py`)
 
-*(pendiente de desarrollo)*
+Crea automáticamente un calendario semanal de torneos vía la API de Lichess.
 
-Requiere un token personal de Lichess (Configuración → API access tokens). **No lo pongas directo en el código** — usa una variable de entorno o un archivo `.env` (ya excluido por `.gitignore`).
+### Configuración
+Edita `CALENDARIO_SEMANAL` dentro del archivo para definir tus propios torneos (día, hora, modo, duración, variante, si es rated).
+
+El modo `DRY_RUN` (al inicio del archivo) controla si el script simula (`True`, no crea nada real) o crea los torneos de verdad (`False`).
+
+Requiere el mismo `LICHESS_TOKEN`, pero con el permiso adicional `tournament:write`.
+
+### Ejecución
+```bash
+python lichess_tournaments.py
+```
+
+### Comportamiento
+- Calcula automáticamente la próxima fecha/hora futura para cada torneo (salta las que ya pasaron esta semana).
+- Maneja errores de API sin detener el resto del calendario.
+- Imprime un resumen final: total procesados, exitosos y con error.
+
+**Nota:** dejar `DRY_RUN = True` por defecto para evitar crear torneos duplicados accidentalmente. Cambiar a `False` solo para la demo/evidencia.
