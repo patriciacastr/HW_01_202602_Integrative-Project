@@ -5,7 +5,7 @@ Proyecto integrador de automatización, APIs y análisis de datos. Consta de tre
 | Proyecto | Carpeta | Descripción | Puntos |
 |---|---|---|---|
 | RPA — PeopleSync | [`/peoplesync`](./peoplesync) | Automatización con Selenium del registro de 50 empleados | 7.5 |
-| Web Scraping — SUNAT | [`/sunat`](./sunat) | Extracción del tipo de cambio oficial (ene 2024–actual) | 7.5 |
+| Web Scraping — SUNAT ✅ | [`/sunat`](./sunat) | Extracción del tipo de cambio oficial (ene 2024–actual) | 7.5 |
 | Lichess API ✅ | [`/lichess`](./lichess) | Análisis de partidas y automatización de torneos vía API | 5.0 |
 
 ## Estructura del repositorio
@@ -21,7 +21,10 @@ HW_01_202602_Integrative-Project/
 │   └── README.md              <- instrucciones específicas
 ├── sunat/
 │   ├── sunat_scraper.py
-│   ├── output/                <- CSV consolidado
+│   ├── run_sunat.bat          <- entry point para Task Scheduler
+│   ├── requirements.txt
+│   ├── tipo_cambio_sunat.csv  <- CSV consolidado (974 registros)
+│   ├── logs/                  <- logs de ejecución (run_log.txt)
 │   └── README.md
 └── lichess/
     ├── lichess_analysis.py    <- Parte A: análisis de partidas
@@ -42,8 +45,11 @@ Los proyectos de PeopleSync y SUNAT están configurados para ejecutarse automát
 
 ## Video de presentación
 
-[Enlace al video] — máximo 9 minutos, cubre las tres partes: problema, solución, decisiones técnicas, retos y demo.
+Presentación de las tres partes del proyecto (problema, solución, decisiones técnicas, retos y demo), máximo 9 minutos.
+
+[Ver video](#)
 
 ## Autor
 
-[Tu nombre] — Universidad del Pacífico
+- Patricia Castro Hilario — Universidad del Pacífico
+- Carla Bocanegra Valentin — Universidad del Pacífico
