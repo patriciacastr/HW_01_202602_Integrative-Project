@@ -18,6 +18,10 @@ config_secret.py
 chromedriver.exe
 *.log
 
+# Archivos de debug (temporales, no van al repo final)
+debug_*.html
+debug_*.png
+
 # Sistema
 .DS_Store
 Thumbs.db
