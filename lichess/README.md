@@ -1,5 +1,25 @@
 # Lichess API — Análisis y Automatización
 
+## Requisitos
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configurar el token de Lichess
+
+Ambas partes necesitan la variable de entorno `LICHESS_TOKEN`. Generar un
+token personal en https://lichess.org/account/oauth/token con los scopes
+`game:read` (Parte A) y `tournament:write` (Parte B).
+
+En Windows (PowerShell), antes de correr cada script:
+```powershell
+$env:LICHESS_TOKEN = "tu_token_aqui"
+```
+(Esto solo dura mientras esa ventana de PowerShell esté abierta — hay que
+volver a ponerlo si cierras la terminal.)
+
+
 ## Parte A — Análisis de partidas (`lichess_analysis.py`)
 
 Descarga las partidas de un usuario, genera estadísticas y visualizaciones.
@@ -13,7 +33,6 @@ Requiere un token personal de Lichess con permiso `game:read`, configurado como 
 
 ### Ejecución
 ```bash
-pip install pandas matplotlib requests
 python lichess_analysis.py
 ```
 
@@ -42,5 +61,9 @@ python lichess_tournaments.py
 - Calcula automáticamente la próxima fecha/hora futura para cada torneo (salta las que ya pasaron esta semana).
 - Maneja errores de API sin detener el resto del calendario.
 - Imprime un resumen final: total procesados, exitosos y con error.
+
+### Evidencia
+`output/torneos_log.txt` — salida completa de una corrida en modo
+DRY-RUN, con los 3 torneos simulados y el resumen final (0 errores).
 
 **Nota:** dejar `DRY_RUN = True` por defecto para evitar crear torneos duplicados accidentalmente. Cambiar a `False` solo para la demo/evidencia.
