@@ -76,9 +76,15 @@ def calcular_meses_a_retroceder(anio_inicio: int, mes_inicio: int) -> int:
 
 def crear_driver() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
-    # Descomentar para correr sin ventana visible (útil en Task Scheduler):
-    # options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
     options.add_argument("--start-maximized")
+    options.add_argument("--window-size=1920,1080")  # fuerza viewport grande en headless
+    # Oculta señales de que Chrome está siendo controlado por Selenium
+    # (algunos firewalls, como el de SUNAT, cortan la conexión apenas
+    # detectan estas banderas de automatización en modo headless).
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
     driver = webdriver.Chrome(options=options)
     return driver
 
@@ -87,9 +93,21 @@ def abrir_pagina(driver: webdriver.Chrome) -> None:
     """Carga la página. Por defecto ya queda mostrando el calendario
     del mes actual con datos."""
     driver.get(URL)
-    WebDriverWait(driver, WAIT_TIMEOUT).until(
-        EC.presence_of_element_located(SEL_CELDAS_DIA)
-    )
+    try:
+        WebDriverWait(driver, WAIT_TIMEOUT).until(
+            EC.presence_of_element_located(SEL_CELDAS_DIA)
+        )
+    except TimeoutException:
+        # --- DEBUG TEMPORAL: si falla, guarda una foto y el HTML
+        # completo de lo que Chrome realmente recibió, para diagnosticar
+        # (útil sobre todo en modo headless, donde no vemos la pantalla).
+        # Borrar este bloque cuando ya no haga falta.
+        driver.save_screenshot("debug_headless.png")
+        with open("debug_headless.html", "w", encoding="utf-8") as f:
+            f.write(driver.page_source)
+        print("DEBUG: guardé debug_headless.png y debug_headless.html")
+        # --- FIN DEBUG TEMPORAL ---
+        raise
 
 
 def extraer_mes_actual(driver: webdriver.Chrome) -> list[RegistroTipoCambio]:

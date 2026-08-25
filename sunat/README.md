@@ -3,12 +3,11 @@
 Bot que extrae el tipo de cambio (compra/venta) publicado por SUNAT desde
 enero 2024 hasta el mes actual, y lo consolida en un único CSV.
 
-> **Estado:** en desarrollo. La extracción de datos (`extraer_mes_actual`)
-> y la navegación mes a mes (`avanzar_un_mes`) están implementadas y
-> probadas contra la estructura real del sitio. La selección del mes/año
-> inicial (`seleccionar_mes_inicial`) está implementada pero pendiente de
-> probar end-to-end. Falta configurar la ejecución automática vía
-> Windows Task Scheduler.
+> **Estado:** completo. Extracción, navegación mes a mes, filtro de días
+> duplicados y guardado en CSV probados end-to-end con el rango completo
+> (enero 2024 → mes actual, 974 registros, sin meses fallidos). Ejecución
+> automática vía Windows Task Scheduler configurada y probada (ver
+> sección "Ejecución automática" abajo).
 
 ## Fuente
 
@@ -47,12 +46,36 @@ con la fecha del sistema — no hay que tocar nada cada mes).
 python sunat_scraper.py
 ```
 
-Por defecto corre con ventana de Chrome visible. Para correrlo sin ventana
-(headless, necesario para Task Scheduler), descomentar en el script:
+Corre con ventana de Chrome visible (no headless). El sitio de SUNAT
+bloquea las conexiones en modo headless (`ERR_EMPTY_RESPONSE`, probablemente
+por fingerprinting a nivel de red), así que se descartó ese modo. Esto no es
+un problema para la ejecución automática: ver la siguiente sección.
 
-```python
-options.add_argument("--headless=new")
-```
+## Ejecución automática (Windows Task Scheduler)
+
+`run_sunat.bat` (en esta misma carpeta) es el punto de entrada para Task
+Scheduler: se ubica solo en la carpeta del proyecto, corre el script y
+guarda toda la salida en `logs/run_log.txt` con fecha y hora de cada
+ejecución.
+
+Configuración de la tarea:
+- **Acción:** iniciar programa → ruta completa a `run_sunat.bat`.
+- **Configuración de sesión:** "Ejecutar solo cuando el usuario haya
+  iniciado sesión" (la cuenta de Windows usada no tiene contraseña, así
+  que la opción "ejecutar con o sin sesión iniciada" no es utilizable
+  aquí — esa opción requiere una contraseña guardada).
+- Como corre en modo visible (no headless), al dispararse la tarea se
+  ve a Chrome abrirse y operar solo, sin intervención manual — esa es
+  la evidencia de que el proceso se ejecuta automáticamente.
+
+Probado con "Ejecutar" manual desde Task Scheduler: corrió los 32 meses
+completos y guardó el CSV correctamente, evidenciado en `logs/run_log.txt`.
+
+> Nota: en algunas corridas, la columna "Estado" de Task Scheduler se
+> queda mostrando "En ejecución" después de terminar — es un bug visual
+> conocido de la interfaz de Windows (no indica que el proceso siga
+> corriendo de verdad; se confirma revisando que `run_log.txt` ya tenga
+> la línea final "Guardado: ...").
 
 ## Salida
 
@@ -63,9 +86,7 @@ options.add_argument("--headless=new")
 
 ## Pendiente
 
-- [ ] Probar `seleccionar_mes_inicial` end-to-end contra el sitio real.
-- [ ] Ajustar `avanzar_un_mes` a un `WebDriverWait` explícito en vez de
-      `time.sleep` fijo, si hace falta.
-- [ ] Configurar tarea en Windows Task Scheduler (intérprete de Python,
-      ruta absoluta del script, ruta absoluta de salida).
-- [ ] Evidencia de ejecución automática vía Task Scheduler.
+- [x] Probar el flujo completo (navegación mes a mes desde el mes actual
+      hasta enero 2024) end-to-end contra el sitio real.
+- [x] Configurar tarea en Windows Task Scheduler.
+- [x] Evidencia de ejecución automática vía Task Scheduler (`logs/run_log.txt`).
