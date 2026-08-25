@@ -15,47 +15,102 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import json
+import os
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # CONFIGURACIÓN (edita estos valores según lo que necesites)
 # ---------------------------------------------------------------------------
-USERNAME = "DrNykterstein"   # usuario de Lichess a analizar (configurable)
-MAX_GAMES = 50                # número de partidas a traer (configurable)
+USERNAME_DEFAULT = "Zhigalko_Sergei"   # usuario de Lichess a analizar (configurable)
+MAX_GAMES_DEFAULT = 50               # número de partidas a traer (configurable)
 OUTPUT_DIR = Path("output")   # carpeta donde se guardan los resultados
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
+def pedir_configuracion() -> tuple[str, int]:
+    """
+    Pregunta al usuario, por consola, qué cuenta de Lichess analizar y
+    cuántas partidas traer. Si el usuario presiona Enter sin escribir
+    nada, se usan los valores por defecto definidos arriba.
+    """
+    entrada_usuario = input(
+        f"Usuario de Lichess a analizar (Enter para usar '{USERNAME_DEFAULT}'): "
+    ).strip()
+    username = entrada_usuario if entrada_usuario else USERNAME_DEFAULT
+ 
+    entrada_max = input(
+        f"Número de partidas a traer (Enter para usar {MAX_GAMES_DEFAULT}): "
+    ).strip()
+    if entrada_max:
+        try:
+            max_games = int(entrada_max)
+        except ValueError:
+            print(f"Valor no numérico, se usará el predeterminado ({MAX_GAMES_DEFAULT}).")
+            max_games = MAX_GAMES_DEFAULT
+    else:
+        max_games = MAX_GAMES_DEFAULT
+ 
+    return username, max_games
 
 # ---------------------------------------------------------------------------
 # 1. CONEXIÓN A LA API Y DESCARGA DE PARTIDAS
 # ---------------------------------------------------------------------------
+
 def obtener_partidas(username: str, max_games: int) -> list[dict]:
     """
     Llama al endpoint de Lichess que devuelve las partidas de un usuario
-    en formato NDJSON (una partida por línea, en JSON).
+    en formato NDJSON.
     """
+
     url = f"https://lichess.org/api/games/user/{username}"
+
     params = {
         "max": max_games,
         "opening": True,
         "clocks": False,
         "evals": False,
     }
-    headers = {"Accept": "application/x-ndjson"}
+
+    token = os.getenv("LICHESS_TOKEN")
+
+    if not token:
+        raise RuntimeError(
+            "No se encontró LICHESS_TOKEN. "
+            "Configura el token como variable de entorno."
+        )
+
+    headers = {
+        "Accept": "application/x-ndjson",
+        "User-Agent": "patriciacastr-lichess-analysis/1.0",
+        "Authorization": f"Bearer {token}"
+    }
 
     print(f"Solicitando hasta {max_games} partidas de '{username}'...")
-    response = requests.get(url, params=params, headers=headers, timeout=30)
-    response.raise_for_status()  # lanza error si la petición falló (ej. 404, 500)
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers,
+        timeout=30
+    )
+
+    if response.status_code == 429:
+        raise RuntimeError(
+            "Lichess rechazó la solicitud por límite de API (429). "
+            "Espera un momento antes de volver a intentarlo."
+        )
+
+    response.raise_for_status()
 
     partidas = []
+
     for linea in response.text.strip().split("\n"):
-        if linea:  # ignorar líneas vacías
+        if linea:
             partidas.append(json.loads(linea))
 
     print(f"Se descargaron {len(partidas)} partidas.")
-    return partidas
 
+    return partidas
 
 # ---------------------------------------------------------------------------
 # 2. TRANSFORMACIÓN A DATAFRAME
@@ -99,7 +154,7 @@ def construir_dataframe(partidas: list[dict], username: str) -> pd.DataFrame:
             "rating_usuario": rating_usuario,
             "rating_rival": rating_rival,
             "resultado": resultado,
-            "num_jugadas": p.get("moves", "").count(" ") + 1 if p.get("moves") else None,
+            "num_movimientos": len(p.get("moves", "").split()) if p.get("moves") else 0,
         })
 
     df = pd.DataFrame(filas)
@@ -183,13 +238,32 @@ def exportar_resultados(df: pd.DataFrame, stats: dict, output_dir: Path):
 # MAIN
 # ---------------------------------------------------------------------------
 def main():
-    partidas = obtener_partidas(USERNAME, MAX_GAMES)
+    username, max_games = pedir_configuracion()
+    try:
+        partidas = obtener_partidas(username, max_games)
 
-    if not partidas:
-        print("No se encontraron partidas. Verifica el nombre de usuario.")
+    except requests.exceptions.Timeout:
+        print("Error: la solicitud a Lichess tardó demasiado.")
         return
 
-    df = construir_dataframe(partidas, USERNAME)
+    except requests.exceptions.ConnectionError:
+        print("Error: no se pudo conectar con Lichess.")
+        return
+
+    except requests.exceptions.HTTPError as e:
+        print(f"Error HTTP al acceder a Lichess: {e}")
+        return
+
+    except RuntimeError as e:
+        print(f"Error: {e}")
+        return
+
+    if not partidas:
+        print("La API no devolvió partidas.")
+        return
+
+    df = construir_dataframe(partidas, username)
+
     stats = generar_estadisticas(df)
 
     print("\n--- Estadísticas ---")
@@ -200,7 +274,6 @@ def main():
     exportar_resultados(df, stats, OUTPUT_DIR)
 
     print("\nProceso completado con éxito.")
-
 
 if __name__ == "__main__":
     main()
