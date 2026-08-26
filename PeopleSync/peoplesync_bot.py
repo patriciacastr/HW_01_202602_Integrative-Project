@@ -9,24 +9,26 @@ Requisitos:
 
 Flujo:
     1. Lee el dataset (CSV con las columnas: apellidos_nombres, dni,
-    fecha_nacimiento, genero, telefono, correo, area, puesto,
-    contrato, sede, fecha_ingreso, modalidad).
+       fecha_nacimiento, genero, telefono, correo, area, puesto,
+       contrato, sede, fecha_ingreso, modalidad).
     2. Valida cada registro en Python ANTES de tocar el navegador
-    (contra los valores reales que acepta cada <select> del
-    formulario, más formato de DNI/teléfono/correo/fechas). Los
-    registros inválidos se saltan sin intentar cargarlos.
+       (contra los valores reales que acepta cada <select> del
+       formulario, más formato de DNI/teléfono/correo/fechas). Los
+       registros inválidos se saltan sin intentar cargarlos.
     3. Para cada registro válido: llena el formulario, envía, y
-    verifica que el contador de "Ingresos registrados" haya subido
-    (confirmación de que el registro se guardó).
+       verifica que el contador de "Ingresos registrados" haya subido
+       (confirmación de que el registro se guardó).
     4. Todo en una sola carga de página (sin recargar manualmente).
     5. Al final, imprime un log con: total procesados, exitosos,
-    fallidos, y el detalle de cada fallo (identificador + motivo).
+       fallidos, y el detalle de cada fallo (identificador + motivo).
 """
 
 import re
+import sys
 import time
 from datetime import datetime
 from dataclasses import dataclass
+from pathlib import Path
 
 import pandas as pd
 from selenium import webdriver
@@ -57,7 +59,31 @@ PAUSE_BETWEEN_RECORDS = 1.0  # segundos de cortesía entre cada registro
 # donde no hay nadie para presionar Enter. De todas formas, siempre se
 # guarda una captura de pantalla final como evidencia (ver EVIDENCIA_PNG).
 MODO_INTERACTIVO = True
-EVIDENCIA_PNG = "evidencia_registros.png"
+
+# Carpeta donde vive este script (no la carpeta desde la que se lo
+# ejecute) — así evidencia_registros.png y log_ejecucion.txt siempre
+# quedan guardados junto al .py, sin importar desde dónde corras el
+# comando "python peoplesync_bot.py".
+CARPETA_SCRIPT = Path(__file__).resolve().parent
+EVIDENCIA_PNG = str(CARPETA_SCRIPT / "evidencia_registros.png")
+LOG_TXT_PATH = str(CARPETA_SCRIPT / "log_ejecucion.txt")
+
+
+class _Tee:
+    """Escribe simultáneamente en la consola real y en un archivo de
+    log, para que print() funcione exactamente igual que siempre pero
+    quede además un registro guardado en disco."""
+
+    def __init__(self, *streams):
+        self.streams = streams
+
+    def write(self, data):
+        for s in self.streams:
+            s.write(data)
+
+    def flush(self):
+        for s in self.streams:
+            s.flush()
 
 # ----------------------------------------------------------------------
 # Valores válidos reales (extraídos del <select> del formulario) —
@@ -148,8 +174,7 @@ def validar_registro(fila: dict) -> list[str]:
         errores.append(f"DNI inválido ('{dni}', debe ser 8 dígitos)")
 
     if convertir_fecha(fila.get("fecha_nacimiento", "")) is None:
-        errores.append(
-            f"fecha_nacimiento inválida ('{fila.get('fecha_nacimiento')}')")
+        errores.append(f"fecha_nacimiento inválida ('{fila.get('fecha_nacimiento')}')")
 
     genero = fila.get("genero", "").strip()
     if genero not in GENEROS_VALIDOS:
@@ -157,8 +182,7 @@ def validar_registro(fila: dict) -> list[str]:
 
     telefono = fila.get("telefono", "").strip()
     if not re.fullmatch(r"9\d{8}", telefono):
-        errores.append(
-            f"telefono inválido ('{telefono}', debe ser 9 dígitos empezando en 9)")
+        errores.append(f"telefono inválido ('{telefono}', debe ser 9 dígitos empezando en 9)")
 
     correo = fila.get("correo", "").strip()
     if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", correo):
@@ -174,21 +198,18 @@ def validar_registro(fila: dict) -> list[str]:
 
     contrato = fila.get("contrato", "").strip()
     if contrato not in CONTRATOS_VALIDOS:
-        errores.append(
-            f"contrato no soportado por el formulario ('{contrato}')")
+        errores.append(f"contrato no soportado por el formulario ('{contrato}')")
 
     sede = fila.get("sede", "").strip()
     if sede not in SEDES_VALIDAS:
         errores.append(f"sede no soportada por el formulario ('{sede}')")
 
     if convertir_fecha(fila.get("fecha_ingreso", "")) is None:
-        errores.append(
-            f"fecha_ingreso inválida ('{fila.get('fecha_ingreso')}')")
+        errores.append(f"fecha_ingreso inválida ('{fila.get('fecha_ingreso')}')")
 
     modalidad = fila.get("modalidad", "").strip()
     if modalidad not in MODALIDADES_VALIDAS:
-        errores.append(
-            f"modalidad no soportada por el formulario ('{modalidad}')")
+        errores.append(f"modalidad no soportada por el formulario ('{modalidad}')")
 
     return errores
 
@@ -235,8 +256,7 @@ def registrar_empleado(driver: webdriver.Chrome, fila: dict) -> None:
 
     set_fecha(driver, SEL_FECHA_NAC, convertir_fecha(fila["fecha_nacimiento"]))
 
-    Select(driver.find_element(*SEL_GENERO)
-           ).select_by_visible_text(fila["genero"].strip())
+    Select(driver.find_element(*SEL_GENERO)).select_by_visible_text(fila["genero"].strip())
 
     tel_el = driver.find_element(*SEL_TELEFONO)
     tel_el.clear()
@@ -246,17 +266,12 @@ def registrar_empleado(driver: webdriver.Chrome, fila: dict) -> None:
     correo_el.clear()
     correo_el.send_keys(fila["correo"].strip())
 
-    Select(driver.find_element(*SEL_AREA)
-           ).select_by_visible_text(fila["area"].strip())
-    Select(driver.find_element(*SEL_PUESTO)
-           ).select_by_visible_text(fila["puesto"].strip())
-    Select(driver.find_element(*SEL_CONTRATO)
-           ).select_by_visible_text(fila["contrato"].strip())
-    Select(driver.find_element(*SEL_SEDE)
-           ).select_by_visible_text(fila["sede"].strip())
+    Select(driver.find_element(*SEL_AREA)).select_by_visible_text(fila["area"].strip())
+    Select(driver.find_element(*SEL_PUESTO)).select_by_visible_text(fila["puesto"].strip())
+    Select(driver.find_element(*SEL_CONTRATO)).select_by_visible_text(fila["contrato"].strip())
+    Select(driver.find_element(*SEL_SEDE)).select_by_visible_text(fila["sede"].strip())
 
-    set_fecha(driver, SEL_FECHA_INGRESO,
-              convertir_fecha(fila["fecha_ingreso"]))
+    set_fecha(driver, SEL_FECHA_INGRESO, convertir_fecha(fila["fecha_ingreso"]))
 
     marcar_modalidad(driver, fila["modalidad"].strip())
 
@@ -274,76 +289,91 @@ def registrar_empleado(driver: webdriver.Chrome, fila: dict) -> None:
 # MAIN
 # ----------------------------------------------------------------------
 def main() -> None:
-    df = leer_dataset(DATASET_CSV_PATH)
-    total = len(df)
-    print(f"Registros leídos del dataset: {total}")
+    # Duplica todo lo impreso (print / input) también hacia LOG_TXT_PATH,
+    # y se restaura al final pase lo que pase (bloque finally de abajo).
+    log_file = open(LOG_TXT_PATH, "w", encoding="utf-8")
+    sys.stdout = _Tee(sys.__stdout__, log_file)
 
-    exitosos = 0
-    fallidos: list[RegistroFallido] = []
-
-    driver = crear_driver()
     try:
-        driver.get(FORM_URL)
-        WebDriverWait(driver, WAIT_TIMEOUT).until(
-            EC.presence_of_element_located(SEL_BOTON_REGISTRAR)
-        )
+        print(f"==== Ejecución: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ====\n")
 
-        for i, fila in enumerate(df.to_dict(orient="records"), start=1):
-            identificador = f"{fila.get('dni', '?')} - {fila.get('apellidos_nombres', '?')}"
+        df = leer_dataset(DATASET_CSV_PATH)
+        total = len(df)
+        print(f"Registros leídos del dataset: {total}")
 
-            errores = validar_registro(fila)
-            if errores:
-                motivo = "; ".join(errores)
-                print(f"  [{i}/{total}] SALTADO — {identificador}: {motivo}")
-                fallidos.append(RegistroFallido(identificador, motivo))
-                continue
+        exitosos = 0
+        fallidos: list[RegistroFallido] = []
 
-            try:
-                registrar_empleado(driver, fila)
-                exitosos += 1
-                print(f"  [{i}/{total}] OK — {identificador}")
-            except (TimeoutException, NoSuchElementException) as e:
-                motivo = f"error en el formulario: {type(e).__name__}"
-                print(f"  [{i}/{total}] FALLÓ — {identificador}: {motivo}")
-                fallidos.append(RegistroFallido(identificador, motivo))
-            except Exception as e:
-                motivo = f"error inesperado: {e}"
-                print(f"  [{i}/{total}] FALLÓ — {identificador}: {motivo}")
-                fallidos.append(RegistroFallido(identificador, motivo))
-
-            time.sleep(PAUSE_BETWEEN_RECORDS)
-
-        # -------------------- LOG FINAL --------------------
-        print("\n" + "=" * 60)
-        print("RESUMEN FINAL")
-        print("=" * 60)
-        print(f"Total de registros procesados: {total}")
-        print(f"Registros cargados exitosamente: {exitosos}")
-        print(f"Registros que no se pudieron cargar: {len(fallidos)}")
-
-        if fallidos:
-            print("\nDetalle de registros fallidos:")
-            for f in fallidos:
-                print(f"  - {f.identificador}: {f.motivo}")
-
-        # -------------------- EVIDENCIA --------------------
+        driver = crear_driver()
         try:
-            driver.execute_script(
-                "document.getElementById('records-section')?.scrollIntoView();"
+            driver.get(FORM_URL)
+            WebDriverWait(driver, WAIT_TIMEOUT).until(
+                EC.presence_of_element_located(SEL_BOTON_REGISTRAR)
             )
-            driver.save_screenshot(EVIDENCIA_PNG)
-            print(f"\nCaptura de evidencia guardada: {EVIDENCIA_PNG}")
-        except Exception:
-            pass  # si falla la captura, no interrumpe el cierre del script
 
-        if MODO_INTERACTIVO:
-            input("\nPresiona Enter para cerrar el navegador y finalizar...")
+            for i, fila in enumerate(df.to_dict(orient="records"), start=1):
+                identificador = f"{fila.get('dni', '?')} - {fila.get('apellidos_nombres', '?')}"
+
+                errores = validar_registro(fila)
+                if errores:
+                    motivo = "; ".join(errores)
+                    print(f"  [{i}/{total}] SALTADO — {identificador}: {motivo}")
+                    fallidos.append(RegistroFallido(identificador, motivo))
+                    continue
+
+                try:
+                    registrar_empleado(driver, fila)
+                    exitosos += 1
+                    print(f"  [{i}/{total}] OK — {identificador}")
+                except (TimeoutException, NoSuchElementException) as e:
+                    motivo = f"error en el formulario: {type(e).__name__}"
+                    print(f"  [{i}/{total}] FALLÓ — {identificador}: {motivo}")
+                    fallidos.append(RegistroFallido(identificador, motivo))
+                except Exception as e:
+                    motivo = f"error inesperado: {e}"
+                    print(f"  [{i}/{total}] FALLÓ — {identificador}: {motivo}")
+                    fallidos.append(RegistroFallido(identificador, motivo))
+
+                time.sleep(PAUSE_BETWEEN_RECORDS)
+
+            # -------------------- LOG FINAL --------------------
+            print("\n" + "=" * 60)
+            print("RESUMEN FINAL")
+            print("=" * 60)
+            print(f"Total de registros procesados: {total}")
+            print(f"Registros cargados exitosamente: {exitosos}")
+            print(f"Registros que no se pudieron cargar: {len(fallidos)}")
+
+            if fallidos:
+                print("\nDetalle de registros fallidos:")
+                for f in fallidos:
+                    print(f"  - {f.identificador}: {f.motivo}")
+
+            # -------------------- EVIDENCIA --------------------
+            try:
+                driver.execute_script(
+                    "document.getElementById('records-section')?.scrollIntoView();"
+                )
+                driver.save_screenshot(EVIDENCIA_PNG)
+                print(f"\nCaptura de evidencia guardada: {EVIDENCIA_PNG}")
+            except Exception:
+                pass  # si falla la captura, no interrumpe el cierre del script
+
+            if MODO_INTERACTIVO:
+                input("\nPresiona Enter para cerrar el navegador y finalizar...")
+
+        finally:
+            # Red de seguridad: el navegador se cierra siempre, incluso si
+            # algo falló antes de llegar al resumen.
+            driver.quit()
 
     finally:
-        # Red de seguridad: el navegador se cierra siempre, incluso si
-        # algo falló antes de llegar al resumen.
-        driver.quit()
+        # El log queda guardado pase lo que pase, incluso si algo falló
+        # antes de que se creara el navegador.
+        sys.stdout = sys.__stdout__
+        log_file.close()
 
 
 if __name__ == "__main__":
     main()
+

@@ -1,0 +1,92 @@
+==== Ejecución: 2026-08-26 07:59:45 ====
+
+Registros leídos del dataset: 50
+  [1/50] OK — 49364231 - Chávez Castillo, Carlos
+  [2/50] OK — 53343768 - Rodríguez Núñez, Ricardo Julio
+  [3/50] OK — 50434052 - Mamani Herrera, Fernando
+  [4/50] SALTADO — 48376941 - Ríos Carrasco, Luis: genero no soportado por el formulario ('No binario')
+  [5/50] OK — 55622331 - Medina Sánchez, José
+  [6/50] SALTADO — 51484920 - Herrera Martínez, Alejandro: genero no soportado por el formulario ('No binario')
+  [7/50] OK — 42154210 - López Castillo, Verónica
+  [8/50] OK — 57775807 - Ríos Torres, Milagros
+  [9/50] SALTADO — 73119287 - Díaz Cabrera, Gustavo: genero no soportado por el formulario ('No binario')
+  [10/50] OK — 56872115 - Ríos Espinoza, Manuel
+  [11/50] SALTADO — 57675739 - Ríos García, Alberto: genero no soportado por el formulario ('Prefiero no indicar')
+  [12/50] OK — 75591432 - Ramírez Carrasco, Patricia
+  [13/50] OK — 72614267 - Sánchez Sánchez, Ana Teresa
+  [14/50] SALTADO — 54213536 - Reyes Delgado, Cecilia: genero no soportado por el formulario ('No binario')
+  [15/50] SALTADO — 44296705 - Chávez Castillo, Andrés: genero no soportado por el formulario ('Prefiero no indicar')
+  [16/50] OK — 74504433 - Mamani Martínez, Andrés José
+  [17/50] SALTADO — 52778193 - Bravo Cárdenas, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  [18/50] OK — 56687044 - Mamani Pérez, José
+  [19/50] SALTADO — 76931706 - Martínez Vásquez, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  [20/50] SALTADO — 43934955 - Rojas Salazar, Verónica: genero no soportado por el formulario ('Prefiero no indicar')
+  [21/50] SALTADO — 54609659 - Vargas Medina, Eduardo: genero no soportado por el formulario ('Prefiero no indicar')
+  [22/50] SALTADO — 43817123 - Espinoza Ramírez, Elena: genero no soportado por el formulario ('Prefiero no indicar')
+  [23/50] SALTADO — 78850600 - Ponce Chávez, Andrés: genero no soportado por el formulario ('Prefiero no indicar')
+  [24/50] OK — 70683821 - Díaz Aguilar, Verónica Elena
+  [25/50] OK — 64798543 - Martínez Chávez, Fiorella Sandra
+  [26/50] OK — 47746286 - Díaz Mendoza, Sergio Miguel
+  [27/50] OK — 46194045 - Mendoza López, Gabriela
+  [28/50] SALTADO — 68701583 - Vásquez Núñez, Alberto: genero no soportado por el formulario ('No binario')
+  [29/50] SALTADO — 68842498 - Núñez Torres, Pilar: genero no soportado por el formulario ('No binario')
+  [30/50] OK — 50371898 - Núñez Cárdenas, Rosa
+  [31/50] SALTADO — 47254174 - Herrera Ramírez, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  [32/50] OK — 58696734 - Salazar Mamani, Silvia Karen
+  [33/50] SALTADO — 51983483 - Gómez Mendoza, José: genero no soportado por el formulario ('No binario')
+  [34/50] SALTADO — 65850027 - Cabrera Gómez, Teresa: genero no soportado por el formulario ('Prefiero no indicar')
+  [35/50] OK — 61066522 - Mamani Palacios, Sandra
+  [36/50] SALTADO — 68215675 - Díaz Vargas, Milagros: genero no soportado por el formulario ('No binario')
+  [37/50] SALTADO — 78922119 - Rojas Delgado, Pablo: genero no soportado por el formulario ('No binario')
+  [38/50] SALTADO — 74591398 - Sánchez Medina, Alberto: genero no soportado por el formulario ('Prefiero no indicar')
+  [39/50] OK — 44887419 - Chávez Bravo, Karen Ana
+  [40/50] OK — 68531078 - García Pérez, Patricia
+  [41/50] SALTADO — 77508841 - Ríos Espinoza, Diego: genero no soportado por el formulario ('Prefiero no indicar')
+  [42/50] SALTADO — 58610049 - Mendoza Chávez, Gabriela: genero no soportado por el formulario ('Prefiero no indicar')
+  [43/50] OK — 49286126 - Carrasco Sánchez, Gabriela
+  [44/50] SALTADO — 67902136 - Carrasco Ríos, Ana: genero no soportado por el formulario ('Prefiero no indicar')
+  [45/50] SALTADO — 66171560 - Huamán Aguilar, Carlos: genero no soportado por el formulario ('Prefiero no indicar')
+  [46/50] SALTADO — 66095765 - Guerrero Rodríguez, Silvia: genero no soportado por el formulario ('No binario')
+  [47/50] OK — 68763716 - Rodríguez Sánchez, Manuel
+  [48/50] SALTADO — 58673485 - Mamani Paredes, María: genero no soportado por el formulario ('Prefiero no indicar')
+  [49/50] OK — 56594901 - Fernández Rodríguez, Raúl Luis
+  [50/50] OK — 64756136 - Ríos Mendoza, Pablo
+
+============================================================
+RESUMEN FINAL
+============================================================
+Total de registros procesados: 50
+Registros cargados exitosamente: 24
+Registros que no se pudieron cargar: 26
+
+Detalle de registros fallidos:
+  - 48376941 - Ríos Carrasco, Luis: genero no soportado por el formulario ('No binario')
+  - 51484920 - Herrera Martínez, Alejandro: genero no soportado por el formulario ('No binario')
+  - 73119287 - Díaz Cabrera, Gustavo: genero no soportado por el formulario ('No binario')
+  - 57675739 - Ríos García, Alberto: genero no soportado por el formulario ('Prefiero no indicar')
+  - 54213536 - Reyes Delgado, Cecilia: genero no soportado por el formulario ('No binario')
+  - 44296705 - Chávez Castillo, Andrés: genero no soportado por el formulario ('Prefiero no indicar')
+  - 52778193 - Bravo Cárdenas, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  - 76931706 - Martínez Vásquez, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  - 43934955 - Rojas Salazar, Verónica: genero no soportado por el formulario ('Prefiero no indicar')
+  - 54609659 - Vargas Medina, Eduardo: genero no soportado por el formulario ('Prefiero no indicar')
+  - 43817123 - Espinoza Ramírez, Elena: genero no soportado por el formulario ('Prefiero no indicar')
+  - 78850600 - Ponce Chávez, Andrés: genero no soportado por el formulario ('Prefiero no indicar')
+  - 68701583 - Vásquez Núñez, Alberto: genero no soportado por el formulario ('No binario')
+  - 68842498 - Núñez Torres, Pilar: genero no soportado por el formulario ('No binario')
+  - 47254174 - Herrera Ramírez, Roberto: genero no soportado por el formulario ('Prefiero no indicar')
+  - 51983483 - Gómez Mendoza, José: genero no soportado por el formulario ('No binario')
+  - 65850027 - Cabrera Gómez, Teresa: genero no soportado por el formulario ('Prefiero no indicar')
+  - 68215675 - Díaz Vargas, Milagros: genero no soportado por el formulario ('No binario')
+  - 78922119 - Rojas Delgado, Pablo: genero no soportado por el formulario ('No binario')
+  - 74591398 - Sánchez Medina, Alberto: genero no soportado por el formulario ('Prefiero no indicar')
+  - 77508841 - Ríos Espinoza, Diego: genero no soportado por el formulario ('Prefiero no indicar')
+  - 58610049 - Mendoza Chávez, Gabriela: genero no soportado por el formulario ('Prefiero no indicar')
+  - 67902136 - Carrasco Ríos, Ana: genero no soportado por el formulario ('Prefiero no indicar')
+  - 66171560 - Huamán Aguilar, Carlos: genero no soportado por el formulario ('Prefiero no indicar')
+  - 66095765 - Guerrero Rodríguez, Silvia: genero no soportado por el formulario ('No binario')
+  - 58673485 - Mamani Paredes, María: genero no soportado por el formulario ('Prefiero no indicar')
+
+Captura de evidencia guardada: C:\Users\Patricia\Documents\GitHub\HW_01_202602_Integrative-Project\peoplesync\evidencia_registros.png
+
+Presiona Enter para cerrar el navegador y finalizar...

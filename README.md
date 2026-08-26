@@ -4,9 +4,9 @@ Proyecto integrador de automatización, APIs y análisis de datos. Consta de tre
 
 | Proyecto | Carpeta | Descripción | Puntos |
 |---|---|---|---|
-| RPA — PeopleSync | [`/peoplesync`](./peoplesync) | Automatización con Selenium del registro de 50 empleados | 7.5 |
-| Web Scraping — SUNAT ✅ | [`/sunat`](./sunat) | Extracción del tipo de cambio oficial (ene 2024–actual) | 7.5 |
-| Lichess API ✅ | [`/lichess`](./lichess) | Análisis de partidas y automatización de torneos vía API | 5.0 |
+| RPA — PeopleSync | [`/peoplesync`](./peoplesync) | Automatización con Selenium del registro de 50 empleados |
+| Web Scraping — SUNAT ✅ | [`/sunat`](./sunat) | Extracción del tipo de cambio oficial (ene 2024–actual) |
+| Lichess API ✅ | [`/lichess`](./lichess) | Análisis de partidas y automatización de torneos vía API | 
 
 ## Estructura del repositorio
 
@@ -16,9 +16,9 @@ HW_01_202602_Integrative-Project/
 ├── .gitignore
 ├── peoplesync/
 │   ├── peoplesync_bot.py
-│   ├── dataset.csv            <- 50 registros de entrada
-│   ├── logs/                  <- logs de ejecución
-│   └── README.md              <- instrucciones específicas
+│   ├── dataset en google sheets   <- 50 registros de entrada
+│   ├── logs/                      <- logs de ejecución
+│   └── README.md                  <- instrucciones específicas
 ├── sunat/
 │   ├── sunat_scraper.py
 │   ├── run_sunat.bat          <- entry point para Task Scheduler
@@ -39,13 +39,6 @@ HW_01_202602_Integrative-Project/
 - Instalar dependencias: `pip install -r requirements.txt` (ver cada subcarpeta)
 - Google Chrome + ChromeDriver (para los proyectos con Selenium)
 
-## Ejecución automática (Task Scheduler)
-
-Los proyectos de PeopleSync y SUNAT están configurados para ejecutarse automáticamente mediante Windows Task Scheduler. Ver instrucciones detalladas en el README de cada subcarpeta.
-
-## Video de presentación
-
-Presentación de las tres partes del proyecto (problema, solución, decisiones técnicas, retos y demo), máximo 9 minutos.
 
 [Ver video](#)
 
