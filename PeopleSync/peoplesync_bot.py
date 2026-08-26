@@ -9,18 +9,18 @@ Requisitos:
 
 Flujo:
     1. Lee el dataset (CSV con las columnas: apellidos_nombres, dni,
-       fecha_nacimiento, genero, telefono, correo, area, puesto,
-       contrato, sede, fecha_ingreso, modalidad).
+    fecha_nacimiento, genero, telefono, correo, area, puesto,
+    contrato, sede, fecha_ingreso, modalidad).
     2. Valida cada registro en Python ANTES de tocar el navegador
-       (contra los valores reales que acepta cada <select> del
-       formulario, más formato de DNI/teléfono/correo/fechas). Los
-       registros inválidos se saltan sin intentar cargarlos.
+    (contra los valores reales que acepta cada <select> del
+    formulario, más formato de DNI/teléfono/correo/fechas). Los
+    registros inválidos se saltan sin intentar cargarlos.
     3. Para cada registro válido: llena el formulario, envía, y
-       verifica que el contador de "Ingresos registrados" haya subido
-       (confirmación de que el registro se guardó).
+    verifica que el contador de "Ingresos registrados" haya subido
+    (confirmación de que el registro se guardó).
     4. Todo en una sola carga de página (sin recargar manualmente).
     5. Al final, imprime un log con: total procesados, exitosos,
-       fallidos, y el detalle de cada fallo (identificador + motivo).
+    fallidos, y el detalle de cada fallo (identificador + motivo).
 """
 
 import re
@@ -148,7 +148,8 @@ def validar_registro(fila: dict) -> list[str]:
         errores.append(f"DNI inválido ('{dni}', debe ser 8 dígitos)")
 
     if convertir_fecha(fila.get("fecha_nacimiento", "")) is None:
-        errores.append(f"fecha_nacimiento inválida ('{fila.get('fecha_nacimiento')}')")
+        errores.append(
+            f"fecha_nacimiento inválida ('{fila.get('fecha_nacimiento')}')")
 
     genero = fila.get("genero", "").strip()
     if genero not in GENEROS_VALIDOS:
@@ -156,7 +157,8 @@ def validar_registro(fila: dict) -> list[str]:
 
     telefono = fila.get("telefono", "").strip()
     if not re.fullmatch(r"9\d{8}", telefono):
-        errores.append(f"telefono inválido ('{telefono}', debe ser 9 dígitos empezando en 9)")
+        errores.append(
+            f"telefono inválido ('{telefono}', debe ser 9 dígitos empezando en 9)")
 
     correo = fila.get("correo", "").strip()
     if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", correo):
@@ -172,18 +174,21 @@ def validar_registro(fila: dict) -> list[str]:
 
     contrato = fila.get("contrato", "").strip()
     if contrato not in CONTRATOS_VALIDOS:
-        errores.append(f"contrato no soportado por el formulario ('{contrato}')")
+        errores.append(
+            f"contrato no soportado por el formulario ('{contrato}')")
 
     sede = fila.get("sede", "").strip()
     if sede not in SEDES_VALIDAS:
         errores.append(f"sede no soportada por el formulario ('{sede}')")
 
     if convertir_fecha(fila.get("fecha_ingreso", "")) is None:
-        errores.append(f"fecha_ingreso inválida ('{fila.get('fecha_ingreso')}')")
+        errores.append(
+            f"fecha_ingreso inválida ('{fila.get('fecha_ingreso')}')")
 
     modalidad = fila.get("modalidad", "").strip()
     if modalidad not in MODALIDADES_VALIDAS:
-        errores.append(f"modalidad no soportada por el formulario ('{modalidad}')")
+        errores.append(
+            f"modalidad no soportada por el formulario ('{modalidad}')")
 
     return errores
 
@@ -230,7 +235,8 @@ def registrar_empleado(driver: webdriver.Chrome, fila: dict) -> None:
 
     set_fecha(driver, SEL_FECHA_NAC, convertir_fecha(fila["fecha_nacimiento"]))
 
-    Select(driver.find_element(*SEL_GENERO)).select_by_visible_text(fila["genero"].strip())
+    Select(driver.find_element(*SEL_GENERO)
+           ).select_by_visible_text(fila["genero"].strip())
 
     tel_el = driver.find_element(*SEL_TELEFONO)
     tel_el.clear()
@@ -240,12 +246,17 @@ def registrar_empleado(driver: webdriver.Chrome, fila: dict) -> None:
     correo_el.clear()
     correo_el.send_keys(fila["correo"].strip())
 
-    Select(driver.find_element(*SEL_AREA)).select_by_visible_text(fila["area"].strip())
-    Select(driver.find_element(*SEL_PUESTO)).select_by_visible_text(fila["puesto"].strip())
-    Select(driver.find_element(*SEL_CONTRATO)).select_by_visible_text(fila["contrato"].strip())
-    Select(driver.find_element(*SEL_SEDE)).select_by_visible_text(fila["sede"].strip())
+    Select(driver.find_element(*SEL_AREA)
+           ).select_by_visible_text(fila["area"].strip())
+    Select(driver.find_element(*SEL_PUESTO)
+           ).select_by_visible_text(fila["puesto"].strip())
+    Select(driver.find_element(*SEL_CONTRATO)
+           ).select_by_visible_text(fila["contrato"].strip())
+    Select(driver.find_element(*SEL_SEDE)
+           ).select_by_visible_text(fila["sede"].strip())
 
-    set_fecha(driver, SEL_FECHA_INGRESO, convertir_fecha(fila["fecha_ingreso"]))
+    set_fecha(driver, SEL_FECHA_INGRESO,
+              convertir_fecha(fila["fecha_ingreso"]))
 
     marcar_modalidad(driver, fila["modalidad"].strip())
 
