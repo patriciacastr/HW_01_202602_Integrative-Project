@@ -1,0 +1,153 @@
+==== Ejecucion: mar 25/08/2026 10:33:22.22 ==== 
+Meses a extraer: 32 (desde 01/2024 hasta el mes actual)
+DEBUG: guardé debug_headless.png y debug_headless.html
+Traceback (most recent call last):
+  File "C:\Users\USER\OneDrive - Universidad del Pacífico\Escritorio\Data_science_python\HW_01_202602_Integrative-Project\sunat\sunat_scraper.py", line 226, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\USER\OneDrive - Universidad del Pacífico\Escritorio\Data_science_python\HW_01_202602_Integrative-Project\sunat\sunat_scraper.py", line 195, in main
+    abrir_pagina(driver)
+    ~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\USER\OneDrive - Universidad del Pacífico\Escritorio\Data_science_python\HW_01_202602_Integrative-Project\sunat\sunat_scraper.py", line 97, in abrir_pagina
+    WebDriverWait(driver, WAIT_TIMEOUT).until(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        EC.presence_of_element_located(SEL_CELDAS_DIA)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python314\Lib\site-packages\selenium\webdriver\support\wait.py", line 121, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x7ff78ee7abb5+151b5]
+	chromedriver!GetHandleVerifier [0x7ff78ee7ac10+15210]
+	chromedriver!(No symbol) [0x7ff78e9a5d6d]
+	chromedriver!(No symbol) [0x7ff78ea01289]
+	chromedriver!(No symbol) [0x7ff78ea0158c]
+	chromedriver!(No symbol) [0x7ff78ea52027]
+	chromedriver!(No symbol) [0x7ff78ea4ec0b]
+	chromedriver!(No symbol) [0x7ff78e9f37cc]
+	chromedriver!(No symbol) [0x7ff78e9f46f3]
+	chromedriver!GetHandleVerifier [0x7ff78f49b79b+635d9b]
+	chromedriver!GetHandleVerifier [0x7ff78f495ac6+6300c6]
+	chromedriver!GetHandleVerifier [0x7ff78f4bbcee+6562ee]
+	chromedriver!GetHandleVerifier [0x7ff78ee98ffe+335fe]
+	chromedriver!GetHandleVerifier [0x7ff78eea147c+3ba7c]
+	chromedriver!GetHandleVerifier [0x7ff78ee84d64+1f364]
+	chromedriver!GetHandleVerifier [0x7ff78ee84ef4+1f4f4]
+	chromedriver!GetHandleVerifier [0x7ff78ee67d97+2397]
+	KERNEL32!BaseThreadInitThunk [0x7ffd0f18e8d7+17]
+	ntdll!RtlUserThreadStart [0x7ffd107ac53c+2c]
+
+ 
+==== Ejecucion: mar 25/08/2026 10:34:45.16 ==== 
+Meses a extraer: 32 (desde 01/2024 hasta el mes actual)
+  Mes 1/32: 31 días extraídos
+  Mes 2/32: 31 días extraídos
+  Mes 3/32: 30 días extraídos
+  Mes 4/32: 31 días extraídos
+  Mes 5/32: 30 días extraídos
+  Mes 6/32: 31 días extraídos
+  Mes 7/32: 28 días extraídos
+  Mes 8/32: 31 días extraídos
+  Mes 9/32: 31 días extraídos
+  Mes 10/32: 30 días extraídos
+  Mes 11/32: 31 días extraídos
+  Mes 12/32: 30 días extraídos
+  Mes 13/32: 31 días extraídos
+  Mes 14/32: 31 días extraídos
+  Mes 15/32: 30 días extraídos
+  Mes 16/32: 31 días extraídos
+  Mes 17/32: 30 días extraídos
+  Mes 18/32: 31 días extraídos
+  Mes 19/32: 28 días extraídos
+  Mes 20/32: 31 días extraídos
+  Mes 21/32: 31 días extraídos
+  Mes 22/32: 30 días extraídos
+  Mes 23/32: 31 días extraídos
+  Mes 24/32: 30 días extraídos
+  Mes 25/32: 31 días extraídos
+  Mes 26/32: 31 días extraídos
+  Mes 27/32: 30 días extraídos
+  Mes 28/32: 31 días extraídos
+  Mes 29/32: 30 días extraídos
+  Mes 30/32: 31 días extraídos
+  Mes 31/32: 29 días extraídos
+  Mes 32/32: 31 días extraídos
+
+Guardado: tipo_cambio_sunat.csv (974 registros)
+ 
+==== Ejecucion: mar 25/08/2026 10:37:29.84 ==== 
+Meses a extraer: 32 (desde 01/2024 hasta el mes actual)
+  Mes 1/32: 31 días extraídos
+  Mes 2/32: 31 días extraídos
+  Mes 3/32: 30 días extraídos
+  Mes 4/32: 31 días extraídos
+  Mes 5/32: 30 días extraídos
+  Mes 6/32: 31 días extraídos
+  Mes 7/32: 28 días extraídos
+  Mes 8/32: 31 días extraídos
+  Mes 9/32: 31 días extraídos
+  Mes 10/32: 30 días extraídos
+  Mes 11/32: 31 días extraídos
+  Mes 12/32: 30 días extraídos
+  Mes 13/32: 31 días extraídos
+  Mes 14/32: 31 días extraídos
+  Mes 15/32: 30 días extraídos
+  Mes 16/32: 31 días extraídos
+  Mes 17/32: 30 días extraídos
+  Mes 18/32: 31 días extraídos
+  Mes 19/32: 28 días extraídos
+  Mes 20/32: 31 días extraídos
+  Mes 21/32: 31 días extraídos
+  Mes 22/32: 30 días extraídos
+  Mes 23/32: 31 días extraídos
+  Mes 24/32: 30 días extraídos
+  Mes 25/32: 31 días extraídos
+  Mes 26/32: 31 días extraídos
+  Mes 27/32: 30 días extraídos
+  Mes 28/32: 31 días extraídos
+  Mes 29/32: 30 días extraídos
+  Mes 30/32: 31 días extraídos
+  Mes 31/32: 29 días extraídos
+  Mes 32/32: 31 días extraídos
+
+Guardado: tipo_cambio_sunat.csv (974 registros)
+ 
+==== Ejecucion: mar 25/08/2026 10:42:48.25 ==== 
+Meses a extraer: 32 (desde 01/2024 hasta el mes actual)
+  Mes 1/32: 31 días extraídos
+  Mes 2/32: 31 días extraídos
+  Mes 3/32: 30 días extraídos
+  Mes 4/32: 31 días extraídos
+  Mes 5/32: 30 días extraídos
+  Mes 6/32: 31 días extraídos
+  Mes 7/32: 28 días extraídos
+  Mes 8/32: 31 días extraídos
+  Mes 9/32: 31 días extraídos
+  Mes 10/32: 30 días extraídos
+  Mes 11/32: 31 días extraídos
+  Mes 12/32: 30 días extraídos
+  Mes 13/32: 31 días extraídos
+  Mes 14/32: 31 días extraídos
+  Mes 15/32: 30 días extraídos
+  Mes 16/32: 31 días extraídos
+  Mes 17/32: 30 días extraídos
+  Mes 18/32: 31 días extraídos
+  Mes 19/32: 28 días extraídos
+  Mes 20/32: 31 días extraídos
+  Mes 21/32: 31 días extraídos
+  Mes 22/32: 30 días extraídos
+  Mes 23/32: 31 días extraídos
+  Mes 24/32: 30 días extraídos
+  Mes 25/32: 31 días extraídos
+  Mes 26/32: 31 días extraídos
+  Mes 27/32: 30 días extraídos
+  Mes 28/32: 31 días extraídos
+  Mes 29/32: 30 días extraídos
+  Mes 30/32: 31 días extraídos
+  Mes 31/32: 29 días extraídos
+  Mes 32/32: 31 días extraídos
+
+Guardado: tipo_cambio_sunat.csv (974 registros)
+ 
