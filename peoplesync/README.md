@@ -86,7 +86,3 @@ Mismo patrón que el proyecto de SUNAT: crear una tarea que ejecute
 desatendidas, poner `MODO_INTERACTIVO = False` en el script (si no, el
 proceso queda esperando un Enter que nunca llega).
 
-## Pendiente
-
-- [ ] Configurar y evidenciar la tarea de Windows Task Scheduler (con
-      `MODO_INTERACTIVO = False`).
