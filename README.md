@@ -4,7 +4,7 @@ Proyecto integrador de automatización, APIs y análisis de datos. Consta de tre
 
 | Proyecto | Carpeta | Descripción | Puntos |
 |---|---|---|---|
-| RPA — PeopleSync | [`/peoplesync`](./peoplesync) | Automatización con Selenium del registro de 50 empleados |
+| RPA — PeopleSync ✅| [`/peoplesync`](./peoplesync) | Automatización con Selenium del registro de 50 empleados |
 | Web Scraping — SUNAT ✅ | [`/sunat`](./sunat) | Extracción del tipo de cambio oficial (ene 2024–actual) |
 | Lichess API ✅ | [`/lichess`](./lichess) | Análisis de partidas y automatización de torneos vía API | 
 
